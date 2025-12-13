@@ -10,14 +10,11 @@ app.use(express.json());
 app.get("/", (req, res) => res.send(`Server is running`));
 
 
-app.get("/check", auth, (req, res) => res.send("Middleware successfully working"));
-
-
-
-
-
 // Routes
 const authRoute = require("./routes/authRotue");
 app.use("/", authRoute);
+
+const eventsRoute = require('./routes/eventsRoute');
+app.use("/api/events", eventsRoute);
 
 app.listen(PORT, (req, res) => console.log(`Server is listening on ${PORT}`));
