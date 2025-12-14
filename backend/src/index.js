@@ -17,4 +17,9 @@ app.use("/", authRoute);
 const eventsRoute = require('./routes/eventsRoute');
 app.use("/api/events", eventsRoute);
 
+
+const swapRequestsRoute = require('./routes/swapRequestsRoute');
+app.use('/api',swapRequestsRoute);
+
+
 app.listen(PORT, (req, res) => console.log(`Server is listening on ${PORT}`));

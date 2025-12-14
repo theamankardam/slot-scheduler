@@ -23,10 +23,10 @@ const eventSchema = new mongoose.Schema({
         enum: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
         required: true
     },
-    User: {
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        required: true
+        required: true,
     },
 
 }, { timestamps: true })
