@@ -184,6 +184,4 @@ const swapResponse = async (req, res) => {
     }
 };
 
-
-
 module.exports = { fetchAllSwappableSlots, swapRequest, swapResponse }
