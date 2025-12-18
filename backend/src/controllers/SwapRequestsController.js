@@ -99,14 +99,91 @@ const swapRequest = async (req, res) => {
 
 
 
-// const swapResponse = async (req, res) => {
-//     try {
-
-//     } catch (error) {
-
-//     }
-
-// }
+const swapResponse = async (req, res) => {
+    try {
+        const { requestId } = req.params;
+        const { accept } = req.body || {};
+        const { userId } = req.user;
 
 
-module.exports = { fetchAllSwappableSlots, swapRequest }
+        if (typeof accept !== "boolean") {
+            return res.status(400).json({
+                success: false,
+                message: "accept field must be true or false"
+            });
+        }
+
+
+        // Populate converts referenced slot ObjectIds into full Event documents
+        const request = await SwapRequests.findById(requestId)
+            .populate('mySlot')
+            .populate('theirSlot');
+
+        if (!request) {
+            return res.status(404).json({
+                success: false,
+                message: "Swap request not found"
+            });
+        }
+
+        // Only receiver can respond
+        if (request.receiver.toString() !== userId) {
+            return res.status(403).json({
+                success: false,
+                message: "Unauthorized action"
+            });
+        }
+
+        const mySlot = request.mySlot;
+        const theirSlot = request.theirSlot;
+
+        // Rejection flow
+        if (!accept) {
+            request.status = "REJECTED";
+            mySlot.status = "SWAPPABLE";
+            theirSlot.status = "SWAPPABLE";
+
+            await Promise.all([
+                request.save(),
+                mySlot.save(),
+                theirSlot.save()
+            ]);
+
+            return res.status(200).json({
+                success: true,
+                message: "Swap request rejected"
+            });
+        }
+
+        // Acceptance flow 
+        const tempOwner = mySlot.user;
+        mySlot.user = theirSlot.user;
+        theirSlot.user = tempOwner;
+
+        mySlot.status = "BUSY";
+        theirSlot.status = "BUSY";
+        request.status = "ACCEPTED";
+
+        await Promise.all([
+            mySlot.save(),
+            theirSlot.save(),
+            request.save()
+        ]);
+
+        return res.status(200).json({
+            success: true,
+            message: "Swap completed successfully"
+        });
+
+    } catch (error) {
+        console.log("Error responding to swap:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error"
+        });
+    }
+};
+
+
+
+module.exports = { fetchAllSwappableSlots, swapRequest, swapResponse }
