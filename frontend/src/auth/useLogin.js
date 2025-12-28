@@ -11,7 +11,7 @@ export default function useLogin() {
         onSuccess: (data) => {
             localStorage.setItem("jwtToken", data.jwtToken);
             toast.success("Login successful 🚀");
-            navigate("/myCalender")
+            navigate("/myCalender", { replace: true })
         },
 
         onError: (err) => {
