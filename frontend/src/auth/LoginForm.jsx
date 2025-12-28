@@ -5,27 +5,28 @@ import useLogin from "./useLogin";
 import Logo from "../components/Logo";
 
 export default function LoginForm() {
-  const [email, setEmail] = useState("aman@gmail.com");
-  const [password, setPassword] = useState("12345");
-  const [formError, setFormError] = useState("");
-  const { login, isPending, error } = useLogin();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const { email, password } = formData;
+
+  const { login, isPending } = useLogin();
   const navigate = useNavigate();
 
   const handleLogin = (e) => {
     e.preventDefault();
-    setFormError("");
-
-    if (!email || !password) {
-      setFormError("All fields are required");
-      return;
-    }
 
     login({ email, password });
   };
 
   const handleGuestLogin = () => {
-    setFormError("");
     login({ email: "guest@example.com", password: "guest123" });
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
@@ -49,8 +50,9 @@ export default function LoginForm() {
               </span>
               <input
                 type="email"
+                name="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={handleChange}
                 placeholder="Enter your email"
                 className="w-full pl-10 pr-3 py-2.5 bg-gray-900/60 border border-blue-800/50 text-white rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200 placeholder-gray-400"
               />
@@ -67,23 +69,18 @@ export default function LoginForm() {
               </span>
               <input
                 type="password"
+                name="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={handleChange}
                 placeholder="Enter your password"
                 className="w-full pl-10 pr-3 py-2.5 bg-gray-900/60 border border-blue-800/50 text-white rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200 placeholder-gray-400"
               />
             </div>
           </div>
 
-          {(formError || error) && (
-            <p className="text-red-500 text-sm">
-              {formError || error?.response?.data?.message || "Login failed"}
-            </p>
-          )}
-
           <button
             type="submit"
-            // disabled={isPending}
+            disabled={isPending}
             className="cursor-pointer w-full bg-linear-to-r from-blue-600 via-cyan-500 to-blue-700 text-white py-2.5 rounded-lg font-semibold shadow-md hover:shadow-blue-600/40 hover:scale-[1.02] transition-all duration-300 flex justify-center items-center gap-2"
           >
             {isPending ? (
@@ -102,6 +99,7 @@ export default function LoginForm() {
 
         <div className="flex flex-col gap-3 mb-4">
           <button
+            type="button"
             onClick={handleGuestLogin}
             className="flex items-center justify-center gap-2 w-full border border-blue-500 text-blue-300 py-2 rounded-lg hover:bg-blue-900/30 transition cursor-pointer"
           >

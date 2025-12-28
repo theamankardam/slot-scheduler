@@ -8,12 +8,15 @@ const inputClass =
   "w-full pl-10 pr-3 py-2.5 bg-gray-900/60 border border-blue-800/50 text-white rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200 placeholder-gray-400";
 
 export default function Signup() {
-  const [username, setUserName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const { username, email, password, confirmPassword } = formData;
   const [formError, setFormError] = useState("");
-  const { signup, isPending, error } = useSignup();
+  const { signup, isPending } = useSignup();
   const navigate = useNavigate();
 
   const handleSignup = (e) => {
@@ -33,6 +36,11 @@ export default function Signup() {
     signup({ username, email, password });
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
   return (
     <section className="min-h-screen bg-linear-to-br from-gray-900 via-blue-900 to-gray-950 flex items-center justify-center px-4 py-10 text-white">
       <div className="bg-gray-800/70 backdrop-blur-lg border border-blue-700/40 shadow-2xl rounded-2xl w-full max-w-md p-6 sm:p-8 transition-all duration-300 hover:shadow-blue-600/30">
@@ -50,8 +58,9 @@ export default function Signup() {
             </span>
             <input
               type="text"
+              name="username"
               value={username}
-              onChange={(e) => setUserName(e.target.value)}
+              onChange={handleChange}
               placeholder="Full Name"
               className={inputClass}
             />
@@ -62,9 +71,10 @@ export default function Signup() {
               <FaEnvelope />
             </span>
             <input
+              name="email"
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={handleChange}
               placeholder="Email"
               className={inputClass}
             />
@@ -75,9 +85,10 @@ export default function Signup() {
               <FaLock />
             </span>
             <input
+              name="password"
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={handleChange}
               placeholder="Password"
               className={inputClass}
             />
@@ -88,29 +99,26 @@ export default function Signup() {
               <FaLock />
             </span>
             <input
+              name="confirmPassword"
               type="password"
               value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              onChange={handleChange}
               placeholder="Confirm Password"
               className={inputClass}
             />
           </div>
 
-          {(formError || error) && (
-            <p className="text-red-500 text-sm text-center">
-              {formError || error?.response?.data?.message}
-            </p>
+          {formError && (
+            <p className="text-red-500 text-sm text-center">{formError}</p>
           )}
 
           <button
             type="submit"
-            // disabled={
-            //   isPending || !username.trim() || !email.trim() || !password
-            // }
+            disabled={isPending}
             className="cursor-pointer w-full bg-linear-to-r from-blue-600 via-cyan-500 to-blue-700 text-white py-2.5 rounded-lg font-semibold shadow-md hover:shadow-blue-600/40 hover:scale-[1.02] transition-all duration-300 flex justify-center items-center"
           >
             {isPending ? (
-              <span class="loading loading-bars loading-md"></span>
+              <span className="loading loading-bars loading-md"></span>
             ) : (
               "Sign Up"
             )}
