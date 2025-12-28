@@ -1,8 +1,8 @@
-import { useNavigate } from "react-router";
-import Logo from "../components/Logo";
 import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
+import useSignup from "./useSignup";
+import Logo from "../components/Logo";
 
 const inputClass =
   "w-full pl-10 pr-3 py-2.5 bg-gray-900/60 border border-blue-800/50 text-white rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200 placeholder-gray-400";
@@ -11,22 +11,26 @@ export default function Signup() {
   const [username, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [formError, setFormError] = useState("");
+  const { signup, isPending, error } = useSignup();
   const navigate = useNavigate();
 
-  const handleSignup = async (e) => {
+  const handleSignup = (e) => {
     e.preventDefault();
-    try {
-      await axios.post("http://localhost:8000/signup", {
-        username,
-        email,
-        password,
-      });
+    setFormError("");
 
-      navigate("/login");
-    } catch (err) {
-      setError(err.response?.data?.message || "Signup failed");
+    if (!email || !password || !username || !confirmPassword) {
+      setFormError("All fields are required");
+      return;
     }
+
+    if (password !== confirmPassword) {
+      setFormError("Passwords do not match");
+      return;
+    }
+
+    signup({ username, email, password });
   };
 
   return (
@@ -46,12 +50,10 @@ export default function Signup() {
             </span>
             <input
               type="text"
-              name="fullName"
               value={username}
               onChange={(e) => setUserName(e.target.value)}
               placeholder="Full Name"
               className={inputClass}
-              required
             />
           </div>
 
@@ -61,12 +63,10 @@ export default function Signup() {
             </span>
             <input
               type="email"
-              name="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
               className={inputClass}
-              required
             />
           </div>
 
@@ -76,43 +76,44 @@ export default function Signup() {
             </span>
             <input
               type="password"
-              name="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
               className={inputClass}
-              required
             />
           </div>
 
-          {/* Confirm Password */}
-          {/* <div className="relative">
+          <div className="relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-400">
               <FaLock />
             </span>
             <input
               type="password"
-              name="confirmPassword"
-              // value={formData.confirmPassword}
-              // onChange={handleChange}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Confirm Password"
               className={inputClass}
-              required
             />
-          </div> */}
+          </div>
 
-          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+          {(formError || error) && (
+            <p className="text-red-500 text-sm text-center">
+              {formError || error?.response?.data?.message}
+            </p>
+          )}
 
           <button
             type="submit"
-            // disabled={isLoading}
+            // disabled={
+            //   isPending || !username.trim() || !email.trim() || !password
+            // }
             className="cursor-pointer w-full bg-linear-to-r from-blue-600 via-cyan-500 to-blue-700 text-white py-2.5 rounded-lg font-semibold shadow-md hover:shadow-blue-600/40 hover:scale-[1.02] transition-all duration-300 flex justify-center items-center"
           >
-            {
-              // !isLoading ?
+            {isPending ? (
+              <span class="loading loading-bars loading-md"></span>
+            ) : (
               "Sign Up"
-              //  : <SpinnerMini />
-            }
+            )}
           </button>
         </form>
 

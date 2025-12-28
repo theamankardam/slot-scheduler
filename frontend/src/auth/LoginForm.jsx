@@ -1,44 +1,31 @@
 import { FaEnvelope, FaLock, FaUser } from "react-icons/fa";
-import Logo from "../components/Logo";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
+import useLogin from "./useLogin";
+import Logo from "../components/Logo";
 
 export default function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState("aman@gmail.com");
+  const [password, setPassword] = useState("12345");
+  const [formError, setFormError] = useState("");
+  const { login, isPending, error } = useLogin();
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    try {
-      const res = await axios.post("http://localhost:8000/login", {
-        email,
-        password,
-      });
+    setFormError("");
 
-      localStorage.setItem("jwtToken", res.data.jwtToken);
-      navigate("/myCalender");
-    } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
+    if (!email || !password) {
+      setFormError("All fields are required");
+      return;
     }
+
+    login({ email, password });
   };
 
-  const handleGuestLogin = async () => {
-    try {
-      const guestEmail = "guest@example.com";
-      const guestPassword = "guest123";
-      const res = await axios.post("http://localhost:8000/login", {
-        email: guestEmail,
-        password: guestPassword,
-      });
-
-      localStorage.setItem("jwtToken", res.data.jwtToken);
-      navigate("/myCalender");
-    } catch (err) {
-      setError(err.response?.data?.message || "Guest login failed");
-    }
+  const handleGuestLogin = () => {
+    setFormError("");
+    login({ email: "guest@example.com", password: "guest123" });
   };
 
   return (
@@ -65,9 +52,7 @@ export default function LoginForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                autoComplete="username"
                 className="w-full pl-10 pr-3 py-2.5 bg-gray-900/60 border border-blue-800/50 text-white rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200 placeholder-gray-400"
-                required
               />
             </div>
           </div>
@@ -85,22 +70,27 @@ export default function LoginForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
-                autoComplete="current-password"
                 className="w-full pl-10 pr-3 py-2.5 bg-gray-900/60 border border-blue-800/50 text-white rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200 placeholder-gray-400"
-                required
               />
             </div>
           </div>
 
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+          {(formError || error) && (
+            <p className="text-red-500 text-sm">
+              {formError || error?.response?.data?.message || "Login failed"}
+            </p>
+          )}
 
           <button
             type="submit"
+            // disabled={isPending}
             className="cursor-pointer w-full bg-linear-to-r from-blue-600 via-cyan-500 to-blue-700 text-white py-2.5 rounded-lg font-semibold shadow-md hover:shadow-blue-600/40 hover:scale-[1.02] transition-all duration-300 flex justify-center items-center gap-2"
           >
-            {/* {!isLoading ? " */}
-            Log In
-            {/* " : <SpinnerMini />} */}
+            {isPending ? (
+              <span class="loading loading-bars loading-md"></span>
+            ) : (
+              "Log In"
+            )}
           </button>
         </form>
 
