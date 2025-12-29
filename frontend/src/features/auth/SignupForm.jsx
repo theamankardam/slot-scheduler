@@ -2,7 +2,7 @@ import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import useSignup from "./useSignup";
-import Logo from "../components/Logo";
+import Logo from "../../components/Logo";
 
 const inputClass =
   "w-full pl-10 pr-3 py-2.5 bg-gray-900/60 border border-blue-800/50 text-white rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200 placeholder-gray-400";

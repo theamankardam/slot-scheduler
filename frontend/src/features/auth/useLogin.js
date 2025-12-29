@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
-import { loginApi } from "../services/auth.api";
+import { loginApi } from "../../services/auth.api";
 import toast from "react-hot-toast";
 
 export default function useLogin() {
@@ -9,7 +9,7 @@ export default function useLogin() {
         mutationFn: loginApi,
         retry: false,
         onSuccess: (data) => {
-            localStorage.setItem("jwtToken", data.jwtToken);
+            localStorage.setItem("jwtToken", data.token);
             toast.success("Login successful 🚀");
             navigate("/myCalender", { replace: true })
         },

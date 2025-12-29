@@ -2,7 +2,7 @@ import { FaEnvelope, FaLock, FaUser } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import useLogin from "./useLogin";
-import Logo from "../components/Logo";
+import Logo from "../../components/Logo";
 
 export default function LoginForm() {
   const [formData, setFormData] = useState({
