@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useCurrentUser } from "../features/auth/useCurrentUser";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   TbCalendarEvent,
@@ -6,7 +7,6 @@ import {
   TbBell,
   TbLogout2,
 } from "react-icons/tb";
-import { useCurrentUser } from "../features/auth/useCurrentUser";
 
 const menuItems = [
   {
@@ -27,25 +27,14 @@ export default function Sidebar() {
   const navigate = useNavigate();
   const { user } = useCurrentUser();
   const { username, email } = user?.user || {};
-
   // ✅ If name is not available, show fallback
   const displayName = username ? username : "User";
   const initial = username ? username.charAt(0).toUpperCase() : "U"; // Fallback initial
 
-  const gradientColors = [
-    "from-pink-500 to-rose-400",
-    "from-blue-600 to-cyan-400",
-    "from-green-500 to-lime-400",
-    "from-purple-500 to-indigo-400",
-    "from-orange-500 to-amber-400",
-  ];
-
-  const [avatarColor] = useState(
-    gradientColors[Math.floor(Math.random() * gradientColors.length)]
-  );
+  // console.log(username, email);
 
   useEffect(() => {
-    const handleResize = () => setExpand(window.innerWidth >= 1280);
+    const handleResize = () => setExpand(window.innerWidth >= 1024);
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -55,20 +44,18 @@ export default function Sidebar() {
     localStorage.removeItem("token");
     navigate("/login");
   };
-
   return (
-    <aside
+    <div
       onMouseEnter={() => window.innerWidth < 1024 && setExpand(true)}
       onMouseLeave={() => window.innerWidth < 1024 && setExpand(false)}
-      className={`h-full flex flex-col justify-between py-6 px-3 bg-gray-900/90 border-r border-blue-700/50 shadow-xl transition-all duration-300 ease-in-out ${
-        expand ? "w-56 md:w-60" : "w-20 md:w-24"
+      className={`flex flex-col justify-between  absolute top-0 left-0 z-10 py-6 px-3  mt-3 lg:mt-4 ml-3 lg:ml-4  h-[calc(100%-1.5rem)] lg:h-[calc(100%-1.75rem)] bg-gray-900/90 border border-blue-700/50 rounded-2xl shadow-xl transition-all duration-400 ease-in-out ${
+        expand ? "w-60" : "w-20 "
       }`}
     >
-      {/* -------- Top Section (Logo + Menu) -------- */}
       <div>
-        <div className="flex items-center gap-3 mb-8 px-2 select-none transition-all duration-300">
+        <div className="flex  items-center gap-3 mb-8 px-2 select-none transition-all duration-300">
           <div
-            className={`px-2.5 py-1.5 rounded-lg bg-linear-to-br ${avatarColor} text-white font-extrabold shadow-md text-base md:text-lg`}
+            className={`px-2.5 py-1.5 rounded-lg bg-linear-to-br from-blue-600 to-cyan-400 text-white font-extrabold shadow-md text-base md:text-lg`}
           >
             SS
           </div>
@@ -76,13 +63,13 @@ export default function Sidebar() {
             <h1 className="ml-2 text-lg md:text-xl font-bold text-white leading-tight">
               Slot
               <span className="text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-blue-500">
-                Swapper
+                Scheduler
               </span>
             </h1>
           )}
         </div>
 
-        <nav className="flex flex-col gap-2.5">
+        <nav className="flex flex-col gap-2.5 p">
           {menuItems.map(({ path, name, icon }) => (
             <NavLink
               key={name}
@@ -102,11 +89,10 @@ export default function Sidebar() {
         </nav>
       </div>
 
-      {/* -------- Bottom Section (Profile + Logout) -------- */}
       <div className="border-t border-blue-800/50 pt-4 mt-4">
         <div className="flex items-center gap-3 px-3 py-2 rounded-xl ">
           <div
-            className={`w-9 h-9 md:w-10 md:h-10 rounded-full px-3 bg-linear-to-br ${avatarColor} flex items-center justify-center text-white font-semibold text-base md:text-lg shadow-inner `}
+            className={`w-9 h-9 md:w-10 md:h-10 rounded-full px-3 bg-linear-to-br from-blue-600 to-cyan-400 flex items-center justify-center text-white font-semibold text-base md:text-lg shadow-inner `}
           >
             {initial}
           </div>
@@ -131,6 +117,6 @@ export default function Sidebar() {
           {expand && <span className="font-medium">Logout</span>}
         </button>
       </div>
-    </aside>
+    </div>
   );
 }

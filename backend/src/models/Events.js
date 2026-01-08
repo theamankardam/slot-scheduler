@@ -20,7 +20,7 @@ const eventSchema = new mongoose.Schema({
     },
     day: {
         type: String,
-        enum: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        enum: ["Mon", "Tue", "Wed", "Thu", "Fri"],
         required: true
     },
     user: {
