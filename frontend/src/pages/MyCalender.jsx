@@ -267,6 +267,8 @@ export default function MyCalender() {
                   const cellClass = event
                     ? event.status === "SWAPPABLE"
                       ? "bg-cyan-700/40 border-cyan-400/40 text-cyan-100"
+                      : event.status === "SWAP_PENDING"
+                      ? "bg-orange-700/50 border-orange-400 text-orange-100"
                       : "bg-blue-900/70 border-blue-700/60 text-blue-200"
                     : "border-blue-800/20";
 
@@ -288,7 +290,11 @@ export default function MyCalender() {
                             {event.title}
                           </span>
                           <span className="text-[8px] sm:text-[10px] font-bold opacity-80 text-yellow-300">
-                            {event.status === "SWAPPABLE" ? "-Swap-" : "-Busy-"}
+                            {event.status === "SWAPPABLE"
+                              ? "-Swap-"
+                              : event.status === "SWAP_PENDING"
+                              ? "-pending-"
+                              : "-Busy-"}
                           </span>
                         </>
                       )}
@@ -320,18 +326,23 @@ export default function MyCalender() {
                   className={`relative p-2 rounded-lg border text-sm group ${
                     e.status === "SWAPPABLE"
                       ? "bg-cyan-700/40 border-cyan-500"
+                      : e.status === "SWAP_PENDING"
+                      ? "bg-orange-700/50 border-orange-400 text-orange-100"
                       : "bg-blue-900/60 border-blue-700"
                   }`}
                 >
                   {/* ACTION BUTTONS */}
-                  <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-all">
-                    {/* EDIT */}
-                    <button
-                      onClick={() => handleEditEvent(e)}
-                      className="
-              w-6 h-6
-              flex items-center justify-center
-              rounded-sm
+                  {e.status === "SWAP_PENDING" ? (
+                    ""
+                  ) : (
+                    <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-all">
+                      {/* EDIT */}
+                      <button
+                        onClick={() => handleEditEvent(e)}
+                        className="
+                      w-6 h-6
+                      flex items-center justify-center
+                      rounded-sm
               border border-cyan-400/40
               text-cyan-300
               bg-cyan-900/20
@@ -339,30 +350,31 @@ export default function MyCalender() {
               transition
               cursor-pointer
             "
-                      title="Edit"
-                    >
-                      ✎
-                    </button>
+                        title="Edit"
+                      >
+                        ✎
+                      </button>
 
-                    {/* REMOVE */}
-                    <button
-                      onClick={() => handleDeleteEvent(e._id)}
-                      className="
-              w-6 h-6
-              flex items-center justify-center
-              rounded-sm
-              border border-red-400/40
-              text-red-300
-              bg-red-900/20
-              hover:bg-red-600/30
-              transition
-              cursor-pointer
-            "
-                      title="Remove"
-                    >
-                      ✕
-                    </button>
-                  </div>
+                      {/* REMOVE */}
+                      <button
+                        onClick={() => handleDeleteEvent(e._id)}
+                        className="
+                      w-6 h-6
+                      flex items-center justify-center
+                      rounded-sm
+                      border border-red-400/40
+                      text-red-300
+                      bg-red-900/20
+                      hover:bg-red-600/30
+                      transition
+                      cursor-pointer
+                      "
+                        title="Remove"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  )}
 
                   {/* EVENT CONTENT */}
                   <div className="font-semibold truncate pr-14">{e.title}</div>

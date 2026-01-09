@@ -6,10 +6,10 @@ export const getAllEvents = async () => {
     return res.data;
 }
 
-export const getEventsByStatus = async (status) => {
-    const res = await axiosInstance.get(`/api/events/${status}`);
-    return res.data;
-};
+// export const getEventsByStatus = async (status) => {
+//     const res = await axiosInstance.get(`/api/events/${status}`);
+//     return res.data;
+// };
 
 // CREATE
 export const createEvent = (data) =>
