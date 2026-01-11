@@ -1,6 +1,3 @@
-
-
-
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
     getAllEvents,
@@ -14,10 +11,7 @@ export function useEvent() {
     const queryClient = useQueryClient();
 
 
-    // ======================
     // READ (Get Events)
-    // ======================
-
     const { data } = useQuery({
         queryKey: ["events"],
         queryFn: getAllEvents,
@@ -25,9 +19,8 @@ export function useEvent() {
     const userEvents = data?.events ?? [];
 
 
-    // =====================
+
     // CREATE
-    // =====================
     const { mutate: createNewEvent, isPending: isCreating } =
         useMutation({
             mutationFn: createEvent,
@@ -41,9 +34,9 @@ export function useEvent() {
             },
         });
 
-    // =====================
+
+
     // UPDATE
-    // =====================
     const { mutate: updateAnEvent, isPending: isUpdating } = useMutation({
         mutationFn: ({ id, data }) => updateEvent(id, data),
         onSuccess: (response) => {
@@ -55,9 +48,11 @@ export function useEvent() {
         },
     });
 
-    // =====================
+
+
+
+
     // DELETE
-    // =====================
     const { mutate: deleteAnEvent } = useMutation({
         mutationFn: deleteEvent,
         onSuccess: (response) => {
@@ -71,10 +66,8 @@ export function useEvent() {
 
 
     return {
-        // DATA
         userEvents,
 
-        // MUTATIONS
         createNewEvent,
         isCreating,
 

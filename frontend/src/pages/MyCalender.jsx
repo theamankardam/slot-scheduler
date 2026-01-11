@@ -37,6 +37,15 @@ const getNextWeekdays = () => {
 const days = getNextWeekdays();
 
 export default function MyCalender() {
+  const [newEvent, setNewEvent] = useState({
+    title: "",
+    day: "",
+    startTime: "09:00",
+    endTime: "10:00",
+    status: "SWAPPABLE",
+  });
+  
+  const [editingEventId, setEditingEventId] = useState(null);
   const {
     userEvents = [],
     createNewEvent,
@@ -45,16 +54,6 @@ export default function MyCalender() {
     isCreating,
     isUpdating,
   } = useEvent();
-  // console.log(userEvents);
-
-  const [newEvent, setNewEvent] = useState({
-    title: "",
-    day: "",
-    startTime: "09:00",
-    endTime: "10:00",
-    status: "SWAPPABLE",
-  });
-  const [editingEventId, setEditingEventId] = useState(null);
 
   const handleEditEvent = (event) => {
     setNewEvent({
@@ -74,9 +73,6 @@ export default function MyCalender() {
     e.preventDefault();
     const { title, day, startTime, endTime, status } = newEvent;
 
-    // ======================
-    // Validations
-    // ======================
     if (!title.trim()) {
       toast.error("Please enter a title!");
       return;
@@ -109,7 +105,6 @@ export default function MyCalender() {
     };
 
     if (editingEventId) {
-      // UPDATE
       updateAnEvent(
         { id: editingEventId, data: eventPayload },
         {
@@ -126,7 +121,6 @@ export default function MyCalender() {
         }
       );
     } else {
-      // CREATE
       createNewEvent(eventPayload, {
         onSuccess: () =>
           setNewEvent({
@@ -152,7 +146,6 @@ export default function MyCalender() {
           className="px-6 py-3 sm:p-4 bg-gray-900/70 border border-cyan-700/40 rounded-xl shadow-lg backdrop-blur-md space-y-1 sm:space-y-3 lg:space-y-2 max-w-4xl 2xl:max-w-7xl mx-3 mb-4 sm:mx-8 sm:my-5"
           onSubmit={handleAddEvent}
         >
-          {/* Row 1 */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-1 sm:gap-2">
             <input
               type="text"
@@ -180,7 +173,6 @@ export default function MyCalender() {
             </select>
           </div>
 
-          {/* Row 2 */}
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-1 sm:gap-2">
             <select
               value={newEvent.status}
@@ -236,11 +228,8 @@ export default function MyCalender() {
           </div>
         </form>
 
-        {/* ================= CALENDAR ================= */}
-
         <div className="px-2  h-[50vh] sm:h-[60vh] md:h-[63vh] lg:h-[60vh] overflow-hidden">
           <div className="grid grid-cols-6 gap-2px xl:gap-1    text-[10px] sm:text-sm border border-cyan-700/30 rounded-lg h-full">
-            {/* Header */}
             <div className="flex items-center justify-center bg-cyan-800/30 py-2px  font-semibold ">
               Time
             </div>
@@ -254,7 +243,6 @@ export default function MyCalender() {
               </div>
             ))}
 
-            {/* Grid */}
             {hours.map((hour) => (
               <React.Fragment key={hour}>
                 <div className="text-blue-400 font-medium text-right pr-1 py-2px border-t border-blue-900/40 bg-gray-950/60 text-[9px]">
@@ -307,15 +295,12 @@ export default function MyCalender() {
         </div>
       </div>
 
-      {/* ================= RIGHT COLUMN (Desktop Only) ================= */}
       <div className="hidden lg:flex w-64 flex-col h-[80vh] mt-4">
         <div className="flex flex-col flex-1 bg-gray-900/80 border border-cyan-700/40 rounded-2xl overflow-hidden shadow-lg">
-          {/* HEADER (fixed) */}
           <div className="p-4 border-b border-cyan-700/40">
             <h2 className="font-bold text-cyan-300">My Events</h2>
           </div>
 
-          {/* SCROLL AREA */}
           <div className="flex-1 p-3 space-y-2 overflow-y-auto scrollbar-thin scrollbar-thumb-cyan-600 scrollbar-track-transparent">
             {userEvents.length === 0 ? (
               <p className="text-gray-400 text-sm">No events added</p>
@@ -331,12 +316,10 @@ export default function MyCalender() {
                       : "bg-blue-900/60 border-blue-700"
                   }`}
                 >
-                  {/* ACTION BUTTONS */}
                   {e.status === "SWAP_PENDING" ? (
                     ""
                   ) : (
                     <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-all">
-                      {/* EDIT */}
                       <button
                         onClick={() => handleEditEvent(e)}
                         className="
@@ -355,7 +338,6 @@ export default function MyCalender() {
                         ✎
                       </button>
 
-                      {/* REMOVE */}
                       <button
                         onClick={() => handleDeleteEvent(e._id)}
                         className="
@@ -376,7 +358,6 @@ export default function MyCalender() {
                     </div>
                   )}
 
-                  {/* EVENT CONTENT */}
                   <div className="font-semibold truncate pr-14">{e.title}</div>
 
                   <div className="text-xs text-gray-300">

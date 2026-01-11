@@ -1,6 +1,3 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
-
 export default function Logo({
   color = "text-gray-900",
   textSize = "text-xl sm:text-2xl xl:text-3xl",
@@ -8,7 +5,7 @@ export default function Logo({
   className = "",
 }) {
   return (
-    <NavLink to="/home">
+    <>
       <div
         className={`flex items-center gap-2 ${className}`}
         aria-label="SlotSwapper logo"
@@ -19,16 +16,15 @@ export default function Logo({
           SS
         </div>
 
-        {/* Logo text */}
         {!compact && (
           <h1 className={`${textSize} font-extrabold tracking-tight ${color}`}>
-           Slot
+            Slot
             <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-600 to-cyan-400">
               Scheduler
             </span>
           </h1>
         )}
       </div>
-    </NavLink>
+    </>
   );
 }

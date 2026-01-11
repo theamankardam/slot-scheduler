@@ -5,13 +5,7 @@ import toast from "react-hot-toast";
 
 export function useSwapRequest() {
     const queryClient = useQueryClient();
-
-
-
-
-    // =========================
     // GET: Swappable slots
-    // =========================
     const { data, isLoading } = useQuery({
         queryKey: ["swappable-slots"],
         queryFn: getSwappableSlots,
@@ -19,9 +13,7 @@ export function useSwapRequest() {
     const swappableSlots = data?.events ?? [];
 
 
-    // =========================
     // GET: Outgoing swap requests
-    // =========================
     const {
         data: myRequests = [],
     } = useQuery({
@@ -31,30 +23,23 @@ export function useSwapRequest() {
     const swapMyRequests = myRequests?.requests ?? [];
 
 
-    // =========================
+
     // GET: Incoming swap requests
-    // =========================
     const {
         data: theirRequests = [],
     } = useQuery({
         queryKey: ["swap-Incoming"],
         queryFn: gettheirSwapRequests,
     });
-
-
     const swapTheirRequests = theirRequests?.requests ?? [];
 
 
 
-    // =========================
     // POST: Send swap request
-    // =========================
     const { mutate: requestSwap, isPending: isRequesting } = useMutation({
         mutationFn: sendSwapRequest,
         onSuccess: () => {
             toast.success("Swap request sent successfully");
-
-            // refresh marketplace + my events
             queryClient.invalidateQueries(["swappable-slots"]);
             queryClient.invalidateQueries(["events"]);
         },
@@ -65,14 +50,12 @@ export function useSwapRequest() {
         },
     });
 
-    // =========================
+
     // POST: Accept / Reject swap
-    // =========================
     const { mutate: respondSwap, isPending: isResponding } = useMutation({
         mutationFn: respondToSwap,
         onSuccess: (data) => {
             toast.success(data.message);
-
             queryClient.invalidateQueries(["swap-Incoming"]);
             queryClient.invalidateQueries(["swap-Outgoing"]);
             queryClient.invalidateQueries(["events"]);
@@ -86,18 +69,16 @@ export function useSwapRequest() {
     });
 
 
-
-
     return {
         swappableSlots,
         isLoading,
+
         requestSwap,
         isRequesting,
+
         swapMyRequests,
         swapTheirRequests,
 
-
-        // accept / reject
         respondSwap,
         isResponding,
     };

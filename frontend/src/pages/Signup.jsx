@@ -1,8 +1,3 @@
 import SignupForm from "../features/auth/SignupForm";
-export default function Signup() {
-  return (
-    <>
-      <SignupForm />
-    </>
-  );
-}
+const Signup = () => <SignupForm />;
+export default Signup;

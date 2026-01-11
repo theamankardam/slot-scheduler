@@ -1,6 +1,6 @@
-import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
 import useSignup from "./useSignup";
 import Logo from "../../components/Logo";
 

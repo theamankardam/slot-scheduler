@@ -17,26 +17,18 @@ export default function Notification() {
       })) || [];
 
   const outgoingSlots =
-  swapMyRequests
-    ?.filter(
-      (req) => req.mySlot && req.theirSlot && req.receiver
-    )
-    .map((req) => ({
-      mySlot: req.mySlot,
-      theirSlot: req.theirSlot,
-      receiver: req.receiver,
-      status: req.status,
-    })) || [];
-
-
-  console.log(swapMyRequests);
-  console.log(outgoingSlots);
+    swapMyRequests
+      ?.filter((req) => req.mySlot && req.theirSlot && req.receiver)
+      .map((req) => ({
+        mySlot: req.mySlot,
+        theirSlot: req.theirSlot,
+        receiver: req.receiver,
+        status: req.status,
+      })) || [];
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-6 h-[85vh] text-slate-200 space-y-8">
-      {/* ================= INCOMING REQUESTS ================= */}
       <section className="border border-slate-800 rounded-lg bg-slate-900/50 flex flex-col max-h-[45vh]">
-        {/* Header */}
         <header className="px-4 py-3 border-b border-slate-800 sticky top-0 bg-slate-900/80 backdrop-blur">
           <h2 className="text-sm font-semibold text-slate-300 flex items-center gap-2">
             Incoming Requests
@@ -48,7 +40,6 @@ export default function Notification() {
           </h2>
         </header>
 
-        {/* List */}
         <div className="divide-y divide-slate-800 overflow-y-auto">
           {incomingSlots.length === 0 ? (
             <p className="px-4 py-6 text-sm text-slate-400">
@@ -60,7 +51,6 @@ export default function Notification() {
                 key={mySlot._id}
                 className="px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 hover:bg-slate-800/40 transition"
               >
-                {/* Text */}
                 <div className="space-y-0.5">
                   <p className="text-sm text-slate-100">
                     <span className="text-sky-400">
@@ -80,7 +70,6 @@ export default function Notification() {
                   </span>
                 </div>
 
-                {/* Actions */}
                 <div className="flex gap-2">
                   <button
                     disabled={isResponding}
@@ -103,9 +92,7 @@ export default function Notification() {
         </div>
       </section>
 
-      {/* ================= OUTGOING REQUESTS ================= */}
       <section className="border border-slate-800 rounded-lg bg-slate-900/50 flex flex-col max-h-[30vh]">
-        {/* Header */}
         <header className="px-4 py-3 border-b border-slate-800 sticky top-0 bg-slate-900/80 backdrop-blur">
           <h2 className="text-sm font-semibold text-slate-300">
             Outgoing Requests
@@ -117,7 +104,6 @@ export default function Notification() {
           </h2>
         </header>
 
-        {/* List */}
         <div className="divide-y divide-slate-800 overflow-y-auto">
           {outgoingSlots.length === 0 ? (
             <p className="px-4 py-6 text-sm text-slate-400">
@@ -152,9 +138,7 @@ export default function Notification() {
                     {mySlot.day} {mySlot.startTime} – {mySlot.endTime}
                   </p>
                 </div>
-
                 <StatusButton status={status} />
-
               </div>
             ))
           )}

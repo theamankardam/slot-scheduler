@@ -1,33 +1,28 @@
 import { useState } from "react";
 import { useEvent } from "../hooks/useEvent";
-import toast from "react-hot-toast";
 import { useSwapRequest } from "../hooks/useSwapRequest";
+import toast from "react-hot-toast";
 
 export default function Marketplace() {
   const [requestingSlotId, setRequestingSlotId] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
-  const { userEvents } = useEvent();
   const { swappableSlots, requestSwap, isRequesting } = useSwapRequest();
-
+  const { userEvents } = useEvent();
   const mySwappableEvents = userEvents.filter(
     (e) => e.status === "SWAPPABLE" || e.status === "SWAP_PENDING"
   );
 
   const handleSelect = (event) => setSelectedSlot(event);
-
   const handleRequestSwap = (targetEvent) => {
     if (!selectedSlot) {
       toast.error("Select one of your swappable slots first");
       return;
     }
-
     if (selectedSlot._id === targetEvent._id) {
       toast.error("You cannot swap the same slot");
       return;
     }
-
     setRequestingSlotId(targetEvent._id);
-
     requestSwap(
       {
         mySlotId: selectedSlot._id,
@@ -42,29 +37,14 @@ export default function Marketplace() {
   };
 
   return (
-    <div
-      className="
-        max-w-7xl mx-auto
-        px-3 sm:px-6 lg:px-8
-        py-2 md:py-4
-        grid grid-cols-1 lg:grid-cols-2
-        gap-4 sm:gap-6
-        text-white
-
-        h-[85vh]
-    
-        "
-    >
-      {/* ================= MY SLOTS ================= */}
+    <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 md:py-4 grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 text-white h-[85vh]">
       <div className="bg-gray-900/70 border border-cyan-700/40 rounded-xl shadow-lg flex flex-col min-h-[40vh] lg:h-full">
-        {/* Header */}
         <div className="p-3 sm:p-4 border-b border-cyan-700/40 shrink-0">
           <h2 className="text-base sm:text-lg font-bold text-cyan-300">
             Your Swappable Slots
           </h2>
         </div>
 
-        {/* Scroll Area */}
         <div className="flex-1 overflow-y-auto p-2 sm:p-3 space-y-2 scrollbar-thin scrollbar-thumb-cyan-600 scrollbar-track-transparent">
           {mySwappableEvents.length === 0 && (
             <p className="text-gray-400 text-sm">
@@ -97,16 +77,13 @@ export default function Marketplace() {
         </div>
       </div>
 
-      {/* ================= MARKETPLACE ================= */}
       <div className="bg-gray-900/70 border border-cyan-700/40 rounded-xl shadow-lg flex flex-col min-h-[40vh] lg:h-full">
-        {/* Header */}
         <div className="p-3 sm:p-4 border-b border-cyan-700/40 shrink-0">
           <h2 className="text-base sm:text-lg font-bold text-cyan-300">
             Marketplace
           </h2>
         </div>
 
-        {/* Scroll Area */}
         <div className="flex-1 overflow-y-auto p-2 sm:p-3 space-y-2 scrollbar-thin scrollbar-thumb-cyan-600 scrollbar-track-transparent">
           {swappableSlots.length === 0 && (
             <p className="text-gray-400 text-sm">
@@ -117,12 +94,7 @@ export default function Marketplace() {
           {swappableSlots.map((e) => (
             <div
               key={e._id}
-              className="
-                flex flex-col sm:flex-row
-                sm:items-center sm:justify-between
-                gap-2
-                p-3 rounded-lg border bg-gray-800/60
-              "
+              className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-3 rounded-lg border bg-gray-800/60"
             >
               <div>
                 <div className="font-semibold text-cyan-200 text-sm sm:text-base">
@@ -138,14 +110,7 @@ export default function Marketplace() {
 
               <button
                 onClick={() => handleRequestSwap(e)}
-                className="
-                  w-full sm:w-auto
-                  px-4 py-1.5
-                  rounded-lg font-semibold text-sm
-                  bg-linear-to-r from-cyan-600 via-sky-500 to-blue-700
-                  hover:scale-105 transition-all
-                  cursor-pointer
-                "
+                className="w-full sm:w-auto px-4 py-1.5 rounded-lg font-semibold text-sm bg-linear-to-r from-cyan-600 via-sky-500 to-blue-700 hover:scale-105 transition-all cursor-pointer"
               >
                 {isRequesting && requestingSlotId === e._id ? (
                   <span className="loading loading-bars loading-md"></span>

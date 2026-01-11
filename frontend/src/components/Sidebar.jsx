@@ -26,16 +26,10 @@ export default function Sidebar() {
   const [expand, setExpand] = useState(false);
   const navigate = useNavigate();
   const { user } = useCurrentUser();
-
-  
   const { username, email } = user?.user || {};
 
-  
-  // ✅ If name is not available, show fallback
   const displayName = username ? username : "User";
-  const initial = username ? username.charAt(0).toUpperCase() : "U"; // Fallback initial
-
-  // console.log(username, email);
+  const initial = username ? username.charAt(0).toUpperCase() : "U";
 
   useEffect(() => {
     const handleResize = () => setExpand(window.innerWidth >= 1024);
@@ -45,7 +39,7 @@ export default function Sidebar() {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("jwtToken");
     navigate("/login");
   };
   return (

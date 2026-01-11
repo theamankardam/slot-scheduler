@@ -1,10 +1,11 @@
-import { FaEnvelope, FaLock, FaUser } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { FaEnvelope, FaLock, FaUser } from "react-icons/fa";
 import useLogin from "./useLogin";
 import Logo from "../../components/Logo";
 
 export default function LoginForm() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -12,11 +13,8 @@ export default function LoginForm() {
   const { email, password } = formData;
 
   const { login, isPending } = useLogin();
-  const navigate = useNavigate();
-
   const handleLogin = (e) => {
     e.preventDefault();
-
     login({ email, password });
   };
 
