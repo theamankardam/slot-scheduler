@@ -1,5 +1,6 @@
 import axiosInstance from "./axiosInstance";
 
+
 export const getAllEvents = async () => {
     const res = await axiosInstance.get("/api/events");
     return res.data;

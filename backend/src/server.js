@@ -7,16 +7,7 @@ const db = require("./db/db");
 const auth = require('./middlewares/authMiddleware')
 
 const PORT = process.env.PORT || 8000;
-app.use(
-    cors({
-        origin: [
-            process.env.CLIENT_URL,
-            "http://localhost:5173",
-        ],
-        credentials: true,
-    })
-);
-
+app.use(cors());
 app.use(express.json());
 
 
@@ -24,7 +15,7 @@ app.use(express.json());
 const authRoute = require("./routes/authRotue");
 const eventsRoute = require('./routes/eventsRoute');
 const swapRequestsRoute = require('./routes/swapRequestsRoute');
-app.use("/", authRoute);
+app.use("/api", authRoute);
 app.use("/api/events", eventsRoute);
 app.use('/api', swapRequestsRoute);
 

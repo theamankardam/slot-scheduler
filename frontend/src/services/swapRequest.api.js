@@ -1,5 +1,6 @@
 import axiosInstance from "./axiosInstance";
 
+
 export const getSwappableSlots = async () => {
     const res = await axiosInstance.get("/api/swappable-slots");
     return res.data;
@@ -24,11 +25,12 @@ export const gettheirSwapRequests = async () => {
     return data;
 };
 
-
 export const respondToSwap = async ({ requestId, accept }) => {
     const { data } = await axiosInstance.post(
         `/api/swap-response/${requestId}`,
         { accept }
     );
+    console.log(data);
+
     return data;
 };
