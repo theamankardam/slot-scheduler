@@ -29,4 +29,4 @@ app.use("/api/events", eventsRoute);
 app.use('/api', swapRequestsRoute);
 
 
-app.listen(PORT, (req, res) => console.log(`Server is listening on ${PORT}`));
+module.exports = app;
