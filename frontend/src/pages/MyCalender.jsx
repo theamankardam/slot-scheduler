@@ -45,7 +45,7 @@ export default function MyCalender() {
     isCreating,
     isUpdating,
   } = useEvent();
-  console.log(userEvents);
+  // console.log(userEvents);
 
   const [newEvent, setNewEvent] = useState({
     title: "",

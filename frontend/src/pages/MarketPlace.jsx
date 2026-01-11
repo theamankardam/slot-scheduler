@@ -6,14 +6,12 @@ import { useSwapRequest } from "../hooks/useSwapRequest";
 export default function Marketplace() {
   const [requestingSlotId, setRequestingSlotId] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
-
   const { userEvents } = useEvent();
   const { swappableSlots, requestSwap, isRequesting } = useSwapRequest();
 
   const mySwappableEvents = userEvents.filter(
     (e) => e.status === "SWAPPABLE" || e.status === "SWAP_PENDING"
   );
-  console.log(selectedSlot);
 
   const handleSelect = (event) => setSelectedSlot(event);
 
@@ -134,7 +132,7 @@ export default function Marketplace() {
                   {e.day} | {e.startTime} – {e.endTime}
                 </div>
                 <div className="text-[10px] text-cyan-400">
-                  {/* by {e.owner || "User"} */}
+                  by {e?.user?.username || "User"}
                 </div>
               </div>
 

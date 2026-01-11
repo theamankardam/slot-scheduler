@@ -1,9 +1,13 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getSwappableSlots, sendSwapRequest } from "../services/swapRequest.api";
+import { getMySwapRequests, getSwappableSlots, gettheirSwapRequests, respondToSwap, sendSwapRequest } from "../services/swapRequest.api";
 import toast from "react-hot-toast";
+
 
 export function useSwapRequest() {
     const queryClient = useQueryClient();
+
+
+
 
     // =========================
     // GET: Swappable slots
@@ -13,6 +17,34 @@ export function useSwapRequest() {
         queryFn: getSwappableSlots,
     });
     const swappableSlots = data?.events ?? [];
+
+
+    // =========================
+    // GET: Outgoing swap requests
+    // =========================
+    const {
+        data: myRequests = [],
+    } = useQuery({
+        queryKey: ["swap-Outgoing"],
+        queryFn: getMySwapRequests,
+    });
+    const swapMyRequests = myRequests?.requests ?? [];
+
+
+    // =========================
+    // GET: Incoming swap requests
+    // =========================
+    const {
+        data: theirRequests = [],
+    } = useQuery({
+        queryKey: ["swap-Incoming"],
+        queryFn: gettheirSwapRequests,
+    });
+
+
+    const swapTheirRequests = theirRequests?.requests ?? [];
+
+
 
     // =========================
     // POST: Send swap request
@@ -33,13 +65,40 @@ export function useSwapRequest() {
         },
     });
 
+    // =========================
+    // POST: Accept / Reject swap
+    // =========================
+    const { mutate: respondSwap, isPending: isResponding } = useMutation({
+        mutationFn: respondToSwap,
+        onSuccess: (data) => {
+            toast.success(data.message);
+
+            queryClient.invalidateQueries(["swap-Incoming"]);
+            queryClient.invalidateQueries(["swap-Outgoing"]);
+            queryClient.invalidateQueries(["events"]);
+            queryClient.invalidateQueries(["swappable-slots"]);
+        },
+        onError: (err) => {
+            toast.error(
+                err?.response?.data?.message || "Failed to respond to swap"
+            );
+        },
+    });
+
+
+
+
     return {
         swappableSlots,
         isLoading,
-        
         requestSwap,
         isRequesting,
+        swapMyRequests,
+        swapTheirRequests,
 
 
+        // accept / reject
+        respondSwap,
+        isResponding,
     };
 }

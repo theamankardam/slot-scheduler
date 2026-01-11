@@ -14,3 +14,23 @@ export const sendSwapRequest = async ({ mySlotId, theirSlotId }) => {
     });
     return res.data;
 };
+
+export const getMySwapRequests = async () => {
+    const { data } = await axiosInstance.get("/api/myswap-requests");
+    return data;
+};
+
+export const gettheirSwapRequests = async () => {
+    const { data } = await axiosInstance.get("/api/theirswap-requests");
+    return data;
+};
+
+export const respondToSwap = async ({ requestId, accept }) => {
+    const { data } = await axiosInstance.post(
+        `/api/swap-response/${requestId}`,
+        { accept }
+    );
+    console.log(data);
+
+    return data;
+};

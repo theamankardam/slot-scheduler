@@ -26,7 +26,11 @@ export default function Sidebar() {
   const [expand, setExpand] = useState(false);
   const navigate = useNavigate();
   const { user } = useCurrentUser();
+
+  
   const { username, email } = user?.user || {};
+
+  
   // ✅ If name is not available, show fallback
   const displayName = username ? username : "User";
   const initial = username ? username.charAt(0).toUpperCase() : "U"; // Fallback initial

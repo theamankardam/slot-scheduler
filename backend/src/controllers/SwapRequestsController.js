@@ -7,7 +7,7 @@ const fetchAllSwappableSlots = async (req, res) => {
         const swappableEvents = await Events.find({
             user: { $ne: userId },
             status: "SWAPPABLE"
-        });
+        }).populate("user", "username");
 
         return res.status(200).json({
             success: true,
@@ -26,6 +26,61 @@ const fetchAllSwappableSlots = async (req, res) => {
     }
 
 }
+
+
+const fetchMySwapRequests = async (req, res) => {
+    try {
+        const { userId } = req.user;
+
+        const requests = await SwapRequests.find({
+            requester: userId, 
+        })
+            .populate("mySlot")
+            .populate("theirSlot")
+            .populate("receiver", "username");
+
+        return res.status(200).json({
+            success: true,
+            requests,
+            count: requests.length
+        });
+
+    } catch (error) {
+        console.log("Error fetching notifications:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error"
+        });
+    }
+};
+
+
+const fetchtheirSwapRequests = async (req, res) => {
+    try {
+        const { userId } = req.user;
+
+        const requests = await SwapRequests.find({
+            receiver: userId,
+            status: "PENDING"
+        })
+            .populate("mySlot")
+            .populate("theirSlot")
+            .populate("requester", "username");
+
+        return res.status(200).json({
+            success: true,
+            requests,
+            count: requests.length
+        });
+
+    } catch (error) {
+        console.log("Error fetching notifications:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error"
+        });
+    }
+};
 
 
 const swapRequest = async (req, res) => {
@@ -184,4 +239,4 @@ const swapResponse = async (req, res) => {
     }
 };
 
-module.exports = { fetchAllSwappableSlots, swapRequest, swapResponse }
+module.exports = { fetchAllSwappableSlots, swapRequest, swapResponse, fetchMySwapRequests, fetchtheirSwapRequests }
