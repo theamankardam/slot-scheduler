@@ -5,33 +5,15 @@ require("dotenv").config();
 const app = express();
 const db = require("./db/db");
 
-
-const allowedOrigins = [
-  "https://jazzy-fenglisu-86af18.netlify.app",
-  "http://localhost:3000",
-  "http://localhost:5173"
-];
-
-
 app.use(
   cors({
-    origin: function (origin, callback) {
-      // allow requests with no origin (Postman, mobile apps)
-      if (!origin) return callback(null, true);
-
-      if (allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    credentials: true
+    origin: [
+      process.env.CLIENT_URL,
+      "http://localhost:5173",
+    ],
+    credentials: true,
   })
 );
-
-
-app.options("*", cors());
 
 app.use(express.json());
 
