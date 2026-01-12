@@ -18,7 +18,7 @@ app.use(
 app.use(express.json());
 
 // ===== ROUTES =====
-const authRoute = require("./routes/authRoute");
+const authRoute = require("./routes/authRotue");
 const eventsRoute = require("./routes/eventsRoute");
 const swapRequestsRoute = require("./routes/swapRequestsRoute");
 
@@ -31,3 +31,10 @@ app.use("/api/events", eventsRoute);
 app.use("/api", swapRequestsRoute);
 
 module.exports = app;
+
+
+
+
+
+
+
