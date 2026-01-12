@@ -10,6 +10,7 @@ app.use(
     origin: [
       process.env.CLIENT_URL,
       "http://localhost:5173",
+      "https://jazzy-fenglisu-86af18.netlify.app"
     ],
     credentials: true,
   })
