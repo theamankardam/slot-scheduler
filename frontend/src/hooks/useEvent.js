@@ -13,10 +13,10 @@ export function useEvent() {
 
     // READ (Get Events)
     const { data } = useQuery({
-        queryKey: ["events"],
+        queryKey: ["data"],
         queryFn: getAllEvents,
     });
-    const userEvents = data?.events ?? [];
+    const userEvents = data?.data ?? [];
 
 
 
