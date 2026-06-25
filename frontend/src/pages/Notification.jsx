@@ -127,7 +127,9 @@ export default function Notification() {
                       {" "}
                       {theirSlot.title} |{" "}
                     </span>
+                    <span className="block text-[12px] sm:inline sm:text-sm">
                     {theirSlot.day} {theirSlot.startTime} – {theirSlot.endTime}
+                    </span>
                   </p>
                   <p className="text-xs text-slate-400">
                     <span className="sm:hidden">Slot:</span>

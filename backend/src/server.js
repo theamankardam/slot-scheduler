@@ -6,14 +6,14 @@ const app = express();
 const db = require("./db/db");
 
 app.use(
-  cors({
-    origin: [
-      process.env.CLIENT_URL,
-      "http://localhost:5173",
-      "https://jazzy-fenglisu-86af18.netlify.app"
-    ],
-    credentials: true,
-  })
+    cors({
+        origin: [
+            process.env.CLIENT_URL,
+            "http://localhost:5173",
+            "https://jazzy-fenglisu-86af18.netlify.app"
+        ],
+        credentials: true,
+    })
 );
 
 app.use(express.json());
@@ -24,7 +24,7 @@ const eventsRoute = require("./routes/eventsRoute");
 const swapRequestsRoute = require("./routes/swapRequestsRoute");
 
 app.get("/", (req, res) => {
-  res.status(200).send("Backend API is running 🚀");
+    res.status(200).send("Backend API is running 🚀");
 });
 
 app.use("/api/auth", authRoute);
