@@ -1,4 +1,5 @@
 const Events = require('../models/Events');
+const { ApiResponse } = require('../utils/api-response')
 
 const createEvent = async (req, res) => {
     try {
@@ -11,11 +12,15 @@ const createEvent = async (req, res) => {
 
         const savedEvent = await newEvent.save();
 
-        return res.status(201).json({
-            success: true,
-            message: "Event Created successfully",
-            event: savedEvent
-        })
+        // return res.status(201).json({
+        //     success: true,
+        //     message: "Event Created successfully",
+        //     event: savedEvent
+        // })
+
+        return res
+            .status(201)
+            .json(new ApiResponse(201, savedEvent, "Event Created successfully"))
 
     } catch (error) {
         console.log(`Error Creating a Event : `, error);
@@ -32,12 +37,18 @@ const fetchAllEvents = async (req, res) => {
         const { userId } = req.user;
         const userEvents = await Events.find({ user: userId });
 
-        return res.status(200).json({
-            success: true,
-            message: "Events fetched successfully",
-            events: userEvents,
-            count: userEvents.length
-        })
+        // return res.status(200).json({
+        //     success: true,
+        //     message: "Events fetched successfully",
+        //     events: userEvents,
+        //     count: userEvents.length
+        // })
+
+        return res
+            .status(200)
+            .json(
+                new ApiResponse(200, userEvents, "Events fetched successfully"))
+
 
     } catch (error) {
         console.log(`Error Fetching Events : `, error);
@@ -64,12 +75,17 @@ const fetchEventsByStatus = async (req, res) => {
 
         const userEvents = await Events.find({ status: status, user: userId });
 
-        return res.status(200).json({
-            success: true,
-            message: "Events fetched successfully",
-            events: userEvents,
-            count: userEvents.length
-        })
+        // return res.status(200).json({
+        //     success: true,
+        //     message: "Events fetched successfully",
+        //     events: userEvents,
+        //     count: userEvents.length
+        // })
+
+        return res
+            .status(200)
+            .json(
+                new ApiResponse(200, userEvents, "Events fetched successfully"))
 
     } catch (error) {
         console.log(`Error Fetching Events : `, error);
@@ -101,11 +117,15 @@ const updateEventById = async (req, res) => {
             })
         }
 
-        return res.status(200).json({
-            success: true,
-            message: "Events Updated successfully",
-            event: updatedEvent
-        })
+        // return res.status(200).json({
+        //     success: true,
+        //     message: "Events Updated successfully",
+        //     event: updatedEvent
+        // })
+
+        return res.status(200).json(
+            new ApiResponse(200, updatedEvent, "Event Updated Successfully")
+        )
 
     } catch (error) {
         console.log(`Error Updating Events : `, error);
@@ -133,10 +153,14 @@ const deleteEventById = async (req, res) => {
             })
         }
 
-        res.status(200).json({
-            success: true,
-            message: "Item Deleted Successfully"
-        })
+        // res.status(200).json({
+        //     success: true,
+        //     message: "Item Deleted Successfully"
+        // })
+
+        return res
+            .status(200)
+            .json(new ApiResponse(200, "Item Deleted Succesfully"))
 
 
 
