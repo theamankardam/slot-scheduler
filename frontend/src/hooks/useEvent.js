@@ -12,13 +12,13 @@ export function useEvent() {
 
 
     // READ (Get Events)
-    const { events } = useQuery({
+    const { data } = useQuery({
         queryKey: ["data"],
         queryFn: getAllEvents,
     });
-    console.log(events);
+    console.log(data);
     
-    const userEvents = events?.data ?? [];
+    const userEvents = data?.data ?? [];
     console.log(userEvents)
 
 
